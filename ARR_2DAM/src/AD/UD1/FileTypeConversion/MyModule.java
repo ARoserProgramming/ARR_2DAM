@@ -1,4 +1,4 @@
-package ModuleConversion;
+package UD1.FileTypeConversion;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package ModuleConversion;
+package UD1.FileTypeConversion;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -154,7 +154,7 @@ public class SerializeModules {
                 String name = moduleElement.getElementsByTagName("name").item(0).getTextContent();
                 String hours = moduleElement.getElementsByTagName("hours").item(0).getTextContent();
                 String averageGrade = moduleElement.getElementsByTagName("averageGrade").item(0).getTextContent();
-                System.out.println("ModuleConversion.Module " + name);
+                System.out.println("Module " + name);
                 System.out.println("Hours " + hours);
                 System.out.println("AverageGrade " + averageGrade);
                 System.out.println("----------------");
