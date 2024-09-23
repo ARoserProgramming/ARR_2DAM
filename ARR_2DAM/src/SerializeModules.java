@@ -93,7 +93,7 @@ public class SerializeModules {
             log.error("Error, file does not exist: " + e);
         } catch (IOException e) {
             log.error("Error in io " + e);
-        } ;
+        }
     }
     public static void generateXML(String[] names, int[] hours, double[] averageGrades, File xmlFile) {
         try {
