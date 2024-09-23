@@ -16,23 +16,27 @@ import java.util.ArrayList;
 
 public class SerializeModules {
     private static Logger log = Logger.getRootLogger();
+    private static final String XML_FILE_ROUTE = "modules.xml";
+    private static final String CSV_FILE_ROUTE = "modules.csv";
+    private static final String SERIALIZED_FILE_ROUTE = "modules.dat";
 
     public static void main(String[] args) {
-        String XML_FILE_ROUTE = "modules.xml";
-        String CSV_FILE_ROUTE = "modules.csv";
+        File serializedFile = new File(SERIALIZED_FILE_ROUTE);
+        File csvFile = new File(CSV_FILE_ROUTE);
+        File xmlFile = new File(XML_FILE_ROUTE);
         String[] names = {"Acceso a datos", "Sistemas de gestion empresarial", "Empresa e iniciativa emprendedora"};
         int[] hours = {280, 280, 120};
         double[] averageGrades = {5.6, 7.3, 6.9};
-        String SERIALIZED_FILE_ROUTE = "modules.dat";
-        serializeModules(names, hours, averageGrades, SERIALIZED_FILE_ROUTE);
-        ArrayList<Module> desarializedModules = deserializeModules(SERIALIZED_FILE_ROUTE);
+
+        serializeModules(names, hours, averageGrades, serializedFile);
+        ArrayList<Module> desarializedModules = deserializeModules(serializedFile);
         System.out.println(desarializedModules);
-        generateCSV(names,hours,averageGrades,CSV_FILE_ROUTE);
-        readCSV(CSV_FILE_ROUTE);
-        generateXML(names,hours,averageGrades,XML_FILE_ROUTE);
+        generateCSV(names,hours,averageGrades,csvFile);
+        readCSV(csvFile);
+        generateXML(names,hours,averageGrades,xmlFile);
     }
 
-    public static void serializeModules(String[] names, int[] hours, double[] averageGrades, String serializedFile) {
+    public static void serializeModules(String[] names, int[] hours, double[] averageGrades, File serializedFile) {
         try (ObjectOutput oo = new ObjectOutputStream(new FileOutputStream(serializedFile))) {
             for (int i = 0; i < names.length; i++) {
                 Module module = new Module(names[i], hours[i], averageGrades[i]);
@@ -44,7 +48,7 @@ public class SerializeModules {
         }
     }
 
-    public static ArrayList<Module> deserializeModules(String serializedFile) {
+    public static ArrayList<Module> deserializeModules(File serializedFile) {
         ArrayList<Module> moduleList = new ArrayList<>();
         Boolean finishedLooping = false;
         try (ObjectInput oi = new ObjectInputStream(new FileInputStream(serializedFile))) {
@@ -67,7 +71,7 @@ public class SerializeModules {
                 log.warn("Error deserializing, an empty module will be returned");
             return moduleList;
         }
-    public static void generateCSV(String[] names, int[] hours, double[] averageGrades, String csvFile) {
+    public static void generateCSV(String[] names, int[] hours, double[] averageGrades, File csvFile) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(csvFile))) {
             pw.println("Nombre, Horas, NotaMedia");
             for (int i = 0; i < names.length; i++) {
@@ -77,7 +81,7 @@ public class SerializeModules {
             log.error("Error al generar el archivo CSV", e);
         }
     }
-    public static void readCSV(String csvFile){
+    public static void readCSV(File csvFile){
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             String line;
             while ((line = br.readLine()) != null ){
@@ -89,7 +93,7 @@ public class SerializeModules {
             log.error(e);
         } ;
     }
-    public static void generateXML(String[] names, int[] hours, double[] averageGrades, String xmlFile) {
+    public static void generateXML(String[] names, int[] hours, double[] averageGrades, File xmlFile) {
         try {
             DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -119,11 +123,10 @@ public class SerializeModules {
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
 
             DOMSource domSource = new DOMSource(document);
-            StreamResult streamResult = new StreamResult(new File(xmlFile));
+            StreamResult streamResult = new StreamResult(xmlFile);
 
             transformer.transform(domSource, streamResult);
 
