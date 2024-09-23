@@ -14,7 +14,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
-import java.lang.Module;
 import java.util.ArrayList;
 
 public class SerializeModules {
@@ -32,7 +31,7 @@ public class SerializeModules {
         double[] averageGrades = {5.6, 7.3, 6.9};
 
         serializeModules(names, hours, averageGrades, serializedFile);
-        ArrayList<Module> desarializedModules = deserializeModules(serializedFile);
+        ArrayList<MyModule> desarializedModules = deserializeModules(serializedFile);
         System.out.println(desarializedModules);
         generateCSV(names,hours,averageGrades,csvFile);
         readCSV(csvFile);
@@ -52,13 +51,13 @@ public class SerializeModules {
         }
     }
 
-    public static ArrayList<Module> deserializeModules(File serializedFile) {
-        ArrayList<Module> moduleList = new ArrayList<>();
+    public static ArrayList<MyModule> deserializeModules(File serializedFile) {
+        ArrayList<MyModule> moduleList = new ArrayList<>();
         boolean finishedLooping = false;
         try (ObjectInput oi = new ObjectInputStream(new FileInputStream(serializedFile))) {
             while (!finishedLooping) {
                 try {
-                    Module module = (Module) oi.readObject();
+                    MyModule module = (MyModule) oi.readObject();
                     moduleList.add(module);
                 } catch (EOFException e) {
                     finishedLooping = true;
