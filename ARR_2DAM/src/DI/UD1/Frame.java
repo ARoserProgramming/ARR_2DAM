@@ -67,7 +67,7 @@ class Frame extends JFrame {
         d.width = 100;
         amarillo.setPreferredSize(d);
         JButton rosa = new JButton("Rosa");
-        d.height = 40;
+        d.height = 41;
         d.width = 100;
         rosa.setPreferredSize(d);
         panel.add(azul,BorderLayout.SOUTH);
