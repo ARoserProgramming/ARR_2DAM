@@ -1,9 +1,10 @@
+package ModuleConversion;
+
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,13 +14,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
+import java.lang.Module;
 import java.util.ArrayList;
 
 public class SerializeModules {
     private static final Logger log = Logger.getRootLogger();
-    private static final String XML_FILE_ROUTE = "modules.xml";
-    private static final String CSV_FILE_ROUTE = "modules.csv";
-    private static final String SERIALIZED_FILE_ROUTE = "modules.dat";
+    private static final String XML_FILE_ROUTE = "resources/modules.xml";
+    private static final String CSV_FILE_ROUTE = "resources/modules.csv";
+    private static final String SERIALIZED_FILE_ROUTE = "resources/modules.dat";
 
     public static void main(String[] args) {
         File serializedFile = new File(SERIALIZED_FILE_ROUTE);
@@ -41,7 +43,7 @@ public class SerializeModules {
     public static void serializeModules(String[] names, int[] hours, double[] averageGrades, File serializedFile) {
         try (ObjectOutput oo = new ObjectOutputStream(new FileOutputStream(serializedFile))) {
             for (int i = 0; i < names.length; i++) {
-                Module module = new Module(names[i], hours[i], averageGrades[i]);
+                MyModule module = new MyModule(names[i], hours[i], averageGrades[i]);
                 oo.writeObject(module);
 
             }
@@ -153,7 +155,7 @@ public class SerializeModules {
                 String name = moduleElement.getElementsByTagName("name").item(0).getTextContent();
                 String hours = moduleElement.getElementsByTagName("hours").item(0).getTextContent();
                 String averageGrade = moduleElement.getElementsByTagName("averageGrade").item(0).getTextContent();
-                System.out.println("Module " + name);
+                System.out.println("ModuleConversion.Module " + name);
                 System.out.println("Hours " + hours);
                 System.out.println("AverageGrade " + averageGrade);
                 System.out.println("----------------");

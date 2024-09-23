@@ -1,12 +1,14 @@
+package ModuleConversion;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Module implements Serializable {
+public class MyModule implements Serializable {
     String moduleNames;
     int hours;
     double averageGrades;
 
-    public Module(String moduleNames, int hours, double averageGrades) {
+    public MyModule(String moduleNames, int hours, double averageGrades) {
         this.moduleNames = moduleNames;
         this.hours = hours;
         this.averageGrades = averageGrades;
@@ -39,7 +41,7 @@ public class Module implements Serializable {
 
     @Override
     public String toString() {
-        return "Module{" +
+        return "ModuleConversion.Module{" +
                 "moduleNames=" + (moduleNames) +
                 ", hours=" + (hours) +
                 ", averageGrades=" + (averageGrades) +
@@ -50,8 +52,8 @@ public class Module implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Module module = (Module) o;
-        return getHours() == module.getHours() && Double.compare(getAverageGrades(), module.getAverageGrades()) == 0 && Objects.equals(getModuleNames(), module.getModuleNames());
+        MyModule myModule = (MyModule) o;
+        return getHours() == myModule.getHours() && Double.compare(getAverageGrades(), myModule.getAverageGrades()) == 0 && Objects.equals(getModuleNames(), myModule.getModuleNames());
     }
 
     @Override
