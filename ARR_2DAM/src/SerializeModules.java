@@ -16,7 +16,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class SerializeModules {
-    private static Logger log = Logger.getRootLogger();
+    private static final Logger log = Logger.getRootLogger();
     private static final String XML_FILE_ROUTE = "modules.xml";
     private static final String CSV_FILE_ROUTE = "modules.csv";
     private static final String SERIALIZED_FILE_ROUTE = "modules.dat";
@@ -52,7 +52,7 @@ public class SerializeModules {
 
     public static ArrayList<Module> deserializeModules(File serializedFile) {
         ArrayList<Module> moduleList = new ArrayList<>();
-        Boolean finishedLooping = false;
+        boolean finishedLooping = false;
         try (ObjectInput oi = new ObjectInputStream(new FileInputStream(serializedFile))) {
             while (!finishedLooping) {
                 try {
@@ -65,9 +65,9 @@ public class SerializeModules {
                 }
             }
             } catch(FileNotFoundException e){
-                log.error(e);
+                log.error("Error file does not exist " + e);
             } catch(IOException e){
-                log.error(e);
+                log.error("Error in io " + e);
             }
             if (moduleList.isEmpty())
                 log.warn("Error deserializing, an empty module will be returned");
