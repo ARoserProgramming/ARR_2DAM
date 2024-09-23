@@ -1,11 +1,12 @@
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -34,6 +35,7 @@ public class SerializeModules {
         generateCSV(names,hours,averageGrades,csvFile);
         readCSV(csvFile);
         generateXML(names,hours,averageGrades,xmlFile);
+        readXML(xmlFile);
     }
 
     public static void serializeModules(String[] names, int[] hours, double[] averageGrades, File serializedFile) {
@@ -88,9 +90,9 @@ public class SerializeModules {
                 System.out.println(line);
             }
         } catch (FileNotFoundException e) {
-            log.error(e);
+            log.error("Error, file does not exist: " + e);
         } catch (IOException e) {
-            log.error(e);
+            log.error("Error in io " + e);
         } ;
     }
     public static void generateXML(String[] names, int[] hours, double[] averageGrades, File xmlFile) {
@@ -134,6 +136,34 @@ public class SerializeModules {
 
         } catch (ParserConfigurationException | TransformerException e) {
             log.error("Error al generar el archivo XML", e);
+        }
+    }
+    public static void readXML(File xmlFile) {
+        try {
+
+            DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(xmlFile);
+
+            document.getDocumentElement().normalize();
+            NodeList moduleList = document.getElementsByTagName("module");
+
+            for (int i = 0; i < moduleList.getLength(); i++) {
+                Element moduleElement = (Element) moduleList.item(i);
+                String name = moduleElement.getElementsByTagName("name").item(0).getTextContent();
+                String hours = moduleElement.getElementsByTagName("hours").item(0).getTextContent();
+                String averageGrade = moduleElement.getElementsByTagName("averageGrade").item(0).getTextContent();
+                System.out.println("Module " + name);
+                System.out.println("Hours " + hours);
+                System.out.println("AverageGrade " + averageGrade);
+                System.out.println("----------------");
+            }
+        } catch (ParserConfigurationException e) {
+            log.error("Error while parsing: " + e);
+        } catch (IOException e) {
+            throw new RuntimeException("Error in io: " + e);
+        } catch (SAXException e) {
+            throw new RuntimeException("Error in SAX: " +e);
         }
     }
 }
